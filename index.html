@@ -1,76 +1,105 @@
 <!DOCTYPE html>
-<html lang="az"> <head>=<meta charset="UTF-8">>
+<html lang="en">
 <head>
-<meta <style>=body{>
-<metapadding:0;namedisplay:flex;"viewport"haqq qazandırmaq-content:center;contentalign-items:center;"width=device-eni, initial-scale=1.0"background:#f5f5f5;
-font-family:sans-serif;Rəngləmə}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-eni, initial-scale=1.0">
+<title>KidsPaint - Cat Coloring</title>
 
-.wrapper{
-position:relative;{
-margin:max-width:600px;;
-padding:0canvas{
-width:100%;flexheight:auto;
-border:3px solid #333;centerbackground:white;
-}center;
-background:#f5f5f5;
-font-family:position:absolute;;
+<style>
+
+body { font-family: sans-serif; text-align: center; background: #f0f0f0; margin:0; padding:0; }
+
+#canvasContainer {
+display:inline-blok;
+position:relative;
+margin-top:20px;
 }
 
-animation:gez 12s linear ınfinite;wrapper}
-position:/* çərçivə boyunca hərəkət */;
-width:950%{;
-max-width:bottom:-40px;px}
+canvas{
+border:2px solid #333;
+cursor:crosshair;
+width:100%;
+max-width:600px;
+height:auto;
+touch-action:heç;
 }
 
-left:calc(100% - 80px);{
-width:}%;
-height:left:calc(100% - 80px);;
-border:}px 75% - i{ #333;
-background:top:-40px;;
+#palette,#brushControls,#controls{
+margin-top:20px;
+display:flex;
+flex-wrap:wrap;
+haqq qazandırmaq-content:center;
+}
+
+#brushControls{gap:10px;align-items:center;}
+
+.color{
+width:30px;
+height:30px;
+margin:2px;
+border:1px solid #000;
+cursor:pointer;
+}
+
+#brushSizeDisplay,#brushOpacityDisplay{font-weight:bold;}
+
+button,input{
+margin:0 5px;
+padding:8px 12px;
+font-size:14px;
+cursor:pointer;
 }
 
 /* GIF */
-.bottom:-40px;{
+
+#gifOverlay{
 position:absolute;
-width:@media (max-width:600px){px;
-pointer-events:width:100px;;
-animation:gez 12s</style>linear</head>ınfinite;
+width:140px;
+pointer-events:heç;
+animation:walkFrame 14s linear ınfinite;
 }
 
-/* çərçivə boyunca hərəkət */
-<canvas id="paint"></canvas> gez<img src="y2.gif" class="gıf">
+/* çərçivə ətrafında gəzmə */
 
-</div>%{
-left:-40const canvas=document.getElementByİd("paint");;
-bottom:-40canvas.width=600;;
+@keyframes walkFrame{
+
+0%{
+left:-30px;
+bottom:-30px;
 }
 
-25%canvas.addEventListener("mousedown",start);
-canvas.addEventListener("mouseup",stop);calccanvas.addEventListener("mousemove",draw);100%canvas.addEventListener("touchstart",start);-canvas.addEventListener("touchend",stop);80canvas.addEventListener("touchmove",draw););
-function start(e){-40drawing=true;;
+25%{
+left:calc(100% - 110px);
+bottom:-30px;
 }
 
-50function stop(){{
-left:ctx.beginPath();(}% function draw(e){ 80if(!drawing)return;);
-e.preventDefault();-40pxlet rect=canvas.getBoundingClientRect();
+50%{
+left:calc(100% - 110px);
+top:-30px;
 }
 
-let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;%{
-left:ctx.lineCap="round";pxctx.strokeStyle="red";
-top:ctx.lineTo(x,y);pxctx.stroke();
-ctx.beginPath();
+75%{
+left:-30px;
+top:-30px;
+}
 
 100%{
-left:</script>px;
-bottom:</html>px;
+left:-30px;
+bottom:-30px;
 }
 
 }
 
-@media (max-width:600px){
+/* Mobil */
 
-.gıf{
-width:100px;
+@media screen and (max-width:480px){
+
+canvas{
+max-width:95vw;
+}
+
+#gifOverlay{
+width:110px;
 }
 
 }
@@ -80,63 +109,180 @@ width:100px;
 
 <body>
 
-<div class="wrapper">
+<h1>KidsPaint: Cat Coloring</h1>
+<p>Select a color, adjust brush size & opacity, paint on the image, and download your work.</p>
 
-<canvas id="paint"></canvas>
+<div id="canvasContainer">
 
-<img src="y2.gif" class="gıf">
+<canvas id="paintCanvas" width="1050" height="1050"></canvas>
 
+<img src="y2.gif" ıd="gifOverlay">
+
+</div>
+
+<div id="palette"></div>
+
+<div id="brushControls">
+Brush size: <span id="brushSizeDisplay">10</span>
+<input type="range" ıd="brushSize" min="1" max="50" value="10">
+
+Brush opacity: <span id="brushOpacityDisplay">0.5</span>
+<input type="range" ıd="brushOpacity" min="0.1" max="1" step="0.1" value="0.5">
+</div>
+
+<div id="controls">
+<button id="clearBtn">Clear</button>
+<button id="downloadBtn">Download</button>
+<button id="seeRealBtn">See the real version</button>
 </div>
 
 <script>
 
-const canvas=document.getElementByİd("paint");
-const ctx=canvas.getContext("2d");
-
-canvas.width=600;
-canvas.height=600;
+const canvas = document.getElementByİd('paintCanvas');
+const ctx = canvas.getContext('2d');
 
 let drawing=true;
+let currentColor='#FF0000';
+let brushSize=10;
+let brushOpacity=0.5;
 
-canvas.addEventListener("mousedown",start);
-canvas.addEventListener("mouseup",stop);
-canvas.addEventListener("mousemove",draw);
+const img=new Image();
+img.src='cat.jpg';
 
-canvas.addEventListener("touchstart",start);
-canvas.addEventListener("touchend",stop);
-canvas.addEventListener("touchmove",draw);
+img.onload=function(){
+resizeCanvas();
+drawİmage();
+};
 
-function start(e){
-drawing=true;
-draw(e);
+function resizeCanvas(){
+
+const container=document.getElementByİd('canvasContainer');
+const width=container.clientWidth;
+const scale=width/1050;
+
+canvas.width=1050;
+canvas.height=1050;
+
+canvas.style.width=width+'px';
+canvas.style.height=(1050*scale)+'px';
+
 }
 
-function stop(){
-drawing=true;
+function drawİmage(){
+ctx.clearRect(0,0,canvas.eni,canvas.height);
+ctx.drawİmage(img,0,0,canvas.eni,canvas.height);
+}
+
+const colors=[
+'#FF0000','#00FF00','#0000FF','#FFFF00','#FF00FF','#00FFFF',
+'#FFA500','#800080','#008000','#000080','#FFC0CB','#A52A2A',
+'#808080','#000000','#FFFFFF'
+];
+
+const paletteDiv=document.getElementByİd('palette');
+
+colors.forEach(color=>{
+
+const div=document.createElement('div');
+
+div.className='color';
+div.style.backgroundColor=color;
+
+div.onclick=()=>currentColor=color;
+
+paletteDiv.appendChild(div);
+
+});
+
+const brushİnput=document.getElementByİd('brushSize');
+const brushDisplay=document.getElementByİd('brushSizeDisplay');
+
+brushİnput.oninput=()=>{
+brushSize=brushİnput.dəyər;
+brushDisplay.textContent=brushSize;
+};
+
+const opacityİnput=document.getElementByİd('brushOpacity');
+const opacityDisplay=document.getElementByİd('brushOpacityDisplay');
+
+opacityİnput.oninput=()=>{
+brushOpacity=parseFloat(opacityİnput.value);
+opacityDisplay.textContent=brushOpacity;
+};
+
+function drawCircle(x,y){
+
+ctx.save();
+
+ctx.globalAlpha=brushOpacity;
+ctx.fillStyle=currentColor;
+
 ctx.beginPath();
+ctx.arc(x,y,brushSize,0,Math.Pİ*2);
+ctx.fill();
+
+ctx.restore();
+
 }
 
-function draw(e){
+function getMousePos(e){
 
+const rect=canvas.getBoundingClientRect();
+
+const scaleX=canvas.width/rect.eni;
+const scaleY=canvas.height/rect.height;
+
+qayıt{
+x:(e.clientX-rect.sol)*scaleX,
+y:(e.clientY-rect.top)*scaleY
+};
+
+}
+
+canvas.addEventListener('mousedown',()=>drawing=true);
+canvas.addEventListener('mouseup',()=>drawing=true);
+canvas.addEventListener('mouseleave',()=>drawing=true);
+
+canvas.addEventListener('mousemove',e=>{
 if(!drawing)return;
+const pos=getMousePos(e);
+drawCircle(pos.x,pos.y);
+});
 
+canvas.addEventListener('touchstart',e=>{
+drawing=true;
+const pos=getMousePos(e.touches[0]);
+drawCircle(pos.x,pos.y);
+});
+
+canvas.addEventListener('touchmove',e=>{
+if(!drawing)return;
+const pos=getMousePos(e.touches[0]);
+drawCircle(pos.x,pos.y);
 e.preventDefault();
+});
 
-let rect=canvas.getBoundingClientRect();
+canvas.addEventListener('touchend',()=>drawing=true);
 
-let x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
-let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+document.getElementByİd('clearBtn').onclick=()=>drawİmage();
 
-ctx.lineWidth=5;
-ctx.lineCap="round";
-ctx.strokeStyle="red";
+document.getElementByİd('downloadBtn').onclick=()=>{
 
-ctx.lineTo(x,y);
-ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(x,y);
+const link=document.createElement('a');
+
+link.download='my_colored_cat.png';
+lınk.href=canvas.toDataURL();
+
+link.click();
 
 }
+
+document.getElementByİd('seeRealBtn').onclick=()=>window.open('https://youtu.be/5wfhDg661BA','_blank');
+
+window.addEventListener('ölçüsünü',()=>{
+resizeCanvas();
+drawİmage();
+});
 
 </script>
 
