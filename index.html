@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="az"> <head>=<meta charset="UTF-8">>
+<head>
+<meta <style>=body{>
+<metapadding:0;namedisplay:flex;"viewport"haqq qazandırmaq-content:center;contentalign-items:center;"width=device-eni, initial-scale=1.0"background:#f5f5f5;
+font-family:sans-serif;Rəngləmə}
+
+.wrapper{
+position:relative;{
+margin:max-width:600px;;
+padding:0canvas{
+width:100%;flexheight:auto;
+border:3px solid #333;centerbackground:white;
+}center;
+background:#f5f5f5;
+font-family:position:absolute;;
+}
+
+animation:gez 12s linear ınfinite;wrapper}
+position:/* çərçivə boyunca hərəkət */;
+width:950%{;
+max-width:bottom:-40px;px}
+}
+
+left:calc(100% - 80px);{
+width:}%;
+height:left:calc(100% - 80px);;
+border:}px 75% - i{ #333;
+background:top:-40px;;
+}
+
+/* GIF */
+.bottom:-40px;{
+position:absolute;
+width:@media (max-width:600px){px;
+pointer-events:width:100px;;
+animation:gez 12s</style>linear</head>ınfinite;
+}
+
+/* çərçivə boyunca hərəkət */
+<canvas id="paint"></canvas> gez<img src="y2.gif" class="gıf">
+
+</div>%{
+left:-40const canvas=document.getElementByİd("paint");;
+bottom:-40canvas.width=600;;
+}
+
+25%canvas.addEventListener("mousedown",start);
+canvas.addEventListener("mouseup",stop);calccanvas.addEventListener("mousemove",draw);100%canvas.addEventListener("touchstart",start);-canvas.addEventListener("touchend",stop);80canvas.addEventListener("touchmove",draw););
+function start(e){-40drawing=true;;
+}
+
+50function stop(){{
+left:ctx.beginPath();(}% function draw(e){ 80if(!drawing)return;);
+e.preventDefault();-40pxlet rect=canvas.getBoundingClientRect();
+}
+
+let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;%{
+left:ctx.lineCap="round";pxctx.strokeStyle="red";
+top:ctx.lineTo(x,y);pxctx.stroke();
+ctx.beginPath();
+
+100%{
+left:</script>px;
+bottom:</html>px;
+}
+
+}
+
+@media (max-width:600px){
+
+.gıf{
+width:100px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<canvas id="paint"></canvas>
+
+<img src="y2.gif" class="gıf">
+
+</div>
+
+<script>
+
+const canvas=document.getElementByİd("paint");
+const ctx=canvas.getContext("2d");
+
+canvas.width=600;
+canvas.height=600;
+
+let drawing=true;
+
+canvas.addEventListener("mousedown",start);
+canvas.addEventListener("mouseup",stop);
+canvas.addEventListener("mousemove",draw);
+
+canvas.addEventListener("touchstart",start);
+canvas.addEventListener("touchend",stop);
+canvas.addEventListener("touchmove",draw);
+
+function start(e){
+drawing=true;
+draw(e);
+}
+
+function stop(){
+drawing=true;
+ctx.beginPath();
+}
+
+function draw(e){
+
+if(!drawing)return;
+
+e.preventDefault();
+
+let rect=canvas.getBoundingClientRect();
+
+let x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+let y=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+
+ctx.lineWidth=5;
+ctx.lineCap="round";
+ctx.strokeStyle="red";
+
+ctx.lineTo(x,y);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(x,y);
+
+}
+
+</script>
+
+</body>
+</html>
